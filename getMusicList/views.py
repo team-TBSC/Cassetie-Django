@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser
+import json
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
@@ -11,7 +11,7 @@ def getSpotifyList(song):
     sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
     track_info = sp.search(q=song, limit=10, type="track", market='KR')
-    results = {}
+    results = []
     for i in range(10):
         name = track_info["tracks"]["items"][i]['name']
         artist = track_info["tracks"]["items"][i]['artists'][0]['name']
@@ -29,13 +29,13 @@ def getSpotifyList(song):
                   "preview_url": preview_url,
                   "id": id,
                   }
-        results[i] = result
+        results.append(result)
 
     return results
 
 @csrf_exempt
 def getMusicList(request):
-    received = JSONParser().parse(request)
+    received = json.loads(request.body)
     if request.method == 'POST':
         data = getSpotifyList(received['track'])
-    return JsonResponse({'music_list': data}, status=200)
+        return JsonResponse({'music_list': data}, status=200)

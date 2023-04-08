@@ -1,13 +1,15 @@
 from rest_framework import serializers
-from .models import Selected, Features
+from .models import Selected
+# from .models import Features
 
-# # Serializers define the API representation.
-# class SelectedSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Selected
-#         field = ['id', 'name', 'song1', 'song2', 'song3', 'song4', 'song5']
-#
+# Serializers define the API representation.
+class SelectedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Selected
+        fields = ['id', 'name', 'cst', 'song1', 'song2', 'song3', 'song4', 'song5']
+
+
 # class FeaturesSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Features
-#         field = ['id', 'name', 'energy', 'emotion', 'genre1', 'genre2', 'genre3']
+#         fields = ['id', 'name', 'energy', 'emotion', 'genre1', 'genre2', 'genre3']

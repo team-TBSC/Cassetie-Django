@@ -1,11 +1,12 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser
+import json
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import requests
 from bs4 import BeautifulSoup
-# from .serializer import SelectedSerializer, FeaturesSerializer
+from .serializer import SelectedSerializer
+# from .serializer import FeaturesSerializer
 
 def getEnergy(id):
     cid = 'cd36e22dd7b74a6083da70216f22a5dc'
@@ -99,7 +100,7 @@ def getGenre(search, date):
 
 @csrf_exempt
 def getCstInfo(request):
-    received = JSONParser().parse(request)
+    received = json.loads(request.body)
     if request.method == 'POST':
         songData = {}
         songData['name'] = received['name']
@@ -108,10 +109,6 @@ def getCstInfo(request):
         songData['song3'] = received['song3_id']
         songData['song4'] = received['song4_id']
         songData['song5'] = received['song5_id']
-        # songSerializer = SelectedSerializer(data=songData)
-        #
-        # if songSerializer.is_valid():
-        #     songSerializer.save()
 
         data = {}
         data['name'] = received['name']
@@ -132,9 +129,11 @@ def getCstInfo(request):
         song5_date = sp.track(track_id=received['song5_id'], market='KR')['album']['release_date']
         data['genre3'] = getGenre(received['song5_search'], song5_date)
 
-        # cstSerializer = FeaturesSerializer(data=data)
-        # if cstSerializer.is_valid():
-        #     cstSerializer.save()
+        songData['cst'] = str(data['energy']) + str(data['emotion']) + str(data['genre1']) + str(data['genre2']) + str(data['genre3'])
+
+        songSerializer = SelectedSerializer(data=songData)
+        if songSerializer.is_valid():
+            songSerializer.save()
 
     return JsonResponse({'cassetti_info': data}, status=200)
 
