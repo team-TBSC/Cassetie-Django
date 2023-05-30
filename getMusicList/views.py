@@ -5,6 +5,8 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
 def getSpotifyList(song):
+    if song == '':
+        return []
     cid = 'cd36e22dd7b74a6083da70216f22a5dc'
     secret = 'a013e69375a84d9bbb387b941aec418d'
     client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
@@ -12,7 +14,7 @@ def getSpotifyList(song):
 
     track_info = sp.search(q=song, limit=10, type="track", market='KR')
     results = []
-    for i in range(10):
+    for i in range(len(track_info["tracks"]["items"])):
         name = track_info["tracks"]["items"][i]['name']
         artist = track_info["tracks"]["items"][i]['artists'][0]['name']
         album = track_info["tracks"]["items"][i]['album']['name']

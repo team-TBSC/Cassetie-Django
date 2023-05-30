@@ -3,12 +3,14 @@ from django.db import models
 class Selected(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=128)
+    songName = models.CharField(max_length=128)
     cst = models.CharField(max_length=5)
     song1 = models.CharField(max_length=128)
     song2 = models.CharField(max_length=128)
     song3 = models.CharField(max_length=128)
     song4 = models.CharField(max_length=128)
     song5 = models.CharField(max_length=128)
+    text = models.CharField(max_length=128)
 
     def __str__(self):
         return self.name

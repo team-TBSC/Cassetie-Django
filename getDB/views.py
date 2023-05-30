@@ -16,51 +16,62 @@ def getDB(request):
         sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
         data = []
-        #
-        for i in range(len(allDB)):
-            data_temp = []
-            data_temp.append(allDB[i]['fields']['name'])
-            data_temp.append(allDB[i]['fields']['cst'])
 
-            info = sp.track(track_id=allDB[i]['fields']['song1'], market='KR')
+        start = 0
+        if len(allDB) > 15:
+            start = len(allDB) - 15
+        for i in range(start, len(allDB)):
+
+            data_temp = {}
+            data_temp['name'] = allDB[i]['fields']['name']
+            data_temp['num'] = allDB[i]['fields']['cst']
+            data_temp['text'] = allDB[i]['fields']['text']
+            data_temp['song'] = []
+
+            info = sp.track(track_id=allDB[i]['fields']['song1'])
             temp = {}
             temp['track'] = info['name']
             temp['artist'] = info['artists'][0]['name']
             temp['image'] = info['album']['images'][0]['url']
-            temp['preview_url'] = info['preview_url']
-            data_temp.append(temp)
+            # temp['preview_url'] = info['preview_url']
+            # data_temp['song1'] = temp
+            data_temp['song'].append(temp)
 
-            info = sp.track(track_id=allDB[i]['fields']['song2'], market='KR')
+            info = sp.track(track_id=allDB[i]['fields']['song2'])
             temp = {}
             temp['track'] = info['name']
             temp['artist'] = info['artists'][0]['name']
             temp['image'] = info['album']['images'][0]['url']
-            temp['preview_url'] = info['preview_url']
-            data_temp.append(temp)
+            # temp['preview_url'] = info['preview_url']
+            # data_temp['song2'] = temp
+            data_temp['song'].append(temp)
 
-            info = sp.track(track_id=allDB[i]['fields']['song3'], market='KR')
+            info = sp.track(track_id=allDB[i]['fields']['song3'])
             temp = {}
             temp['track'] = info['name']
             temp['artist'] = info['artists'][0]['name']
             temp['image'] = info['album']['images'][0]['url']
-            temp['preview_url'] = info['preview_url']
-            data_temp.append(temp)
+            # temp['preview_url'] = info['preview_url']
+            # data_temp['song3'] = temp
+            data_temp['song'].append(temp)
 
-            info = sp.track(track_id=allDB[i]['fields']['song4'], market='KR')
+            info = sp.track(track_id=allDB[i]['fields']['song4'])
             temp = {}
             temp['track'] = info['name']
             temp['artist'] = info['artists'][0]['name']
             temp['image'] = info['album']['images'][0]['url']
-            temp['preview_url'] = info['preview_url']
-            data_temp.append(temp)
+            # temp['preview_url'] = info['preview_url']
+            # data_temp['song4'] = temp
+            data_temp['song'].append(temp)
 
-            info = sp.track(track_id=allDB[i]['fields']['song5'], market='KR')
+            info = sp.track(track_id=allDB[i]['fields']['song5'])
             temp = {}
             temp['track'] = info['name']
             temp['artist'] = info['artists'][0]['name']
             temp['image'] = info['album']['images'][0]['url']
-            temp['preview_url'] = info['preview_url']
-            data_temp.append(temp)
+            # temp['preview_url'] = info['preview_url']
+            # data_temp['song5'] = temp
+            data_temp['song'].append(temp)
 
             data.append(data_temp)
 
@@ -73,7 +84,10 @@ def getLastDB(request):
         allDB = serializers.serialize("json", Selected.objects.all())
         allDB = json.loads(allDB)
         data = {}
+        data['name'] = allDB[len(allDB)-1]['fields']['name']
         data['result'] = allDB[len(allDB)-1]['fields']['cst']
+        data['songName'] = allDB[len(allDB) - 1]['fields']['songName']
+        data['text'] = allDB[len(allDB) - 1]['fields']['text']
 
         return JsonResponse(data=data, status=200)
 

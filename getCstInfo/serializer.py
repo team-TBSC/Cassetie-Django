@@ -6,7 +6,7 @@ from .models import Selected
 class SelectedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Selected
-        fields = ['id', 'name', 'cst', 'song1', 'song2', 'song3', 'song4', 'song5']
+        fields = ['id', 'name', 'songName', 'cst', 'song1', 'song2', 'song3', 'song4', 'song5', 'text']
 
 
 # class FeaturesSerializer(serializers.ModelSerializer):
